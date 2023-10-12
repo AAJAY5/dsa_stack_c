@@ -47,7 +47,7 @@ bool stack_push(stack_t *stack, void *obj) {
     }
 
     stack->top++;
-    memcpy((stack->mem + stack->top), obj, stack->e_size);
+    memcpy((stack->mem + stack->top - 1), obj, stack->e_size);
     return true;
 }
 
@@ -74,7 +74,7 @@ bool stack_peek(stack_t *stack, void *obj) {
         return false;
     }
 
-    memcpy(obj, (stack->mem + stack->top), stack->e_size);
+    memcpy(obj, (stack->mem + stack->top - 1), stack->e_size);
     return true;
 }
 
