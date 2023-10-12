@@ -91,12 +91,19 @@ bool stack_is_empty(stack_t *stack) {
 }
 
 void stack_delete(stack_t **stack) {
-    if (*stack) {
-        if ((*stack)->mem) {
-            free((*stack)->mem);
-            (*stack)->mem = NULL;
-        }
-        free(*stack);
-        *stack = NULL;
+    if (!(*stack)) {
+        DEBUG("Invalid stack\r\n");
+        return;
     }
+
+    if (!((*stack)->mem)) {
+        DEBUG("Invalid mem\r\n");
+        return;
+    }
+
+    free((*stack)->mem);
+    (*stack)->mem = NULL;
+
+    free(*stack);
+    *stack = NULL;
 }
