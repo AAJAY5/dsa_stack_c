@@ -2,13 +2,18 @@
 
 #ifdef DEBUG_STACK
     #include <stdio.h>
-    #define DEBUG(fmt, ...)     printf("[%s:%d]" fmt, __FILE__, __LINE__, ##__VA_ARGS__)
-#else
-    #define DEBUG(fmt, ...)     ((void)0)
+    #define DEBUG(fmt, ...) printf("[%s][%s:%u]" fmt, __func__, __FILE__, __LINE__##__VA_ARGS__)
+    #else
+    #define DEBUG(fmt, ...) ((void)0)
 #endif
 
 stack_t *stack_create(size_t e_size, size_t e_count) {
     stack_t *stack = NULL;
+
+    if((e_size <=0) || (e_count <= 0)){
+        DEBUG("Invalid size or count\r\n");
+        return NULL;
+    }
 
     void *mem = calloc(e_count, e_size);
     if (!mem) {
@@ -46,8 +51,8 @@ bool stack_push(stack_t *stack, void *obj) {
         return false;
     }
 
+    memcpy((stack->mem + (stack->top * stack->e_size)), obj, stack->e_size);
     stack->top++;
-    memcpy((stack->mem + stack->top - 1), obj, stack->e_size);
     return true;
 }
 
@@ -74,7 +79,7 @@ bool stack_peek(stack_t *stack, void *obj) {
         return false;
     }
 
-    memcpy(obj, (stack->mem + stack->top - 1), stack->e_size);
+    memcpy(obj, (stack->mem + ((stack->top - 1)*stack->e_size)), stack->e_size);
     return true;
 }
 
@@ -88,6 +93,18 @@ bool stack_is_empty(stack_t *stack) {
     if (!stack)
         return false;
     return (stack->top == 0);
+}
+
+size_t stack_available(stack_t *stack){
+    if (!stack)
+        return 0;
+    return stack->top;
+}
+
+size_t stack_size(stack_t *stack){
+    if (!stack)
+        return 0;
+    return stack->e_count;
 }
 
 void stack_delete(stack_t **stack) {

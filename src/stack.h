@@ -70,6 +70,24 @@ bool stack_is_full(stack_t *stack);
 bool stack_is_empty(stack_t *stack);
 
 /**
+ * @brief Retrieves the current size of the stack.
+ *
+ *
+ * @param stack A pointer to the stack object.
+ * @return size of the stack.
+ */
+size_t stack_size(stack_t *stack);
+
+/**
+ * @brief Retrieves the pushed count or available to pop.
+ *
+ *
+ * @param stack A pointer to the stack object.
+ * @return The available space in the stack.
+ */
+size_t stack_available(stack_t *stack);
+
+/**
  * @brief Delete a stack and free its resources.
  *
  * @param stack A pointer to the stack to be deleted.
